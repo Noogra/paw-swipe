@@ -1,0 +1,98 @@
+// PawSwipe — Prisma Schema (Prisma 7)
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADOPTER
+  SHELTER
+}
+
+enum PetType {
+  DOG
+  CAT
+  RABBIT
+  BIRD
+  OTHER
+}
+
+enum Size {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Direction {
+  LEFT
+  RIGHT
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id // matches Supabase Auth user id (UUID)
+  email     String   @unique
+  role      Role     @default(ADOPTER)
+  createdAt DateTime @default(now())
+
+  shelter Shelter?
+  swipes  Swipe[]
+}
+
+model Shelter {
+  id      String @id @default(cuid())
+  userId  String @unique
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name    String
+  phone   String
+  email   String
+  address String
+  city    String
+  website String?
+
+  pets Pet[]
+}
+
+model Pet {
+  id          String   @id @default(cuid())
+  shelterId   String
+  shelter     Shelter  @relation(fields: [shelterId], references: [id], onDelete: Cascade)
+  name        String
+  type        PetType
+  breed       String?
+  ageMonths   Int // age stored in months for precise range filtering
+  size        Size
+  gender      Gender
+  description String
+  photos      String[] // Cloudinary URLs
+  city        String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  swipes Swipe[]
+}
+
+model Swipe {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  petId     String
+  pet       Pet       @relation(fields: [petId], references: [id], onDelete: Cascade)
+  direction Direction
+  createdAt DateTime  @default(now())
+
+  @@unique([userId, petId])
+}
