@@ -268,7 +268,7 @@ const SHELTERS = [
         city: "Jerusalem",
         description:
           "Whiskers is a stubborn but deeply loveable Dachshund. He does things on his own schedule, snores loudly, and thinks every lap belongs to him.",
-        photos: [unsplash("1548199973-03664775a47c")],
+        photos: [unsplash("1520087619250-584c0cbd35e8")],
       },
       {
         name: "Ruby",
@@ -280,7 +280,7 @@ const SHELTERS = [
         city: "Jerusalem",
         description:
           "Ruby is a floppy-eared puppy with a nose that never stops working. She gets along with everyone she meets and approaches life with infectious enthusiasm.",
-        photos: [unsplash("1583511655857-d19b40a7a54e")],
+        photos: [unsplash("1586917138540-f1490b02f205")],
       },
       {
         name: "Lily",
@@ -316,7 +316,7 @@ const SHELTERS = [
         city: "Jerusalem",
         description:
           "Ginger is a bright-eyed orange kitten who turned every foster home into a playground. She's ready for her forever family and has a purr that sounds like a motorboat.",
-        photos: [unsplash("1518791841217-8f162f1912da")],
+        photos: [unsplash("1750144546219-6913bf5bc2ac")],
       },
       {
         name: "Tweety",
@@ -328,7 +328,7 @@ const SHELTERS = [
         city: "Jerusalem",
         description:
           "Tweety whistles tunes, steps up on command, and adores head scratches. She's perfect for a first-time bird owner looking for a small, cheerful companion.",
-        photos: [unsplash("1548681528-6a5c45b66063")],
+        photos: [unsplash("1517101724602-c257fe568157")],
       },
     ],
   },
@@ -386,14 +386,18 @@ async function main() {
 
     console.log(`  Shelter: ${shelter.id}`);
 
-    // Create pets (skip if already exists)
+    // Create or update pets (photos are always synced to seed values)
     for (const pet of pets) {
       const existing = await prisma.pet.findFirst({
         where: { shelterId: shelter.id, name: pet.name },
       });
 
       if (existing) {
-        console.log(`  • ${pet.name} — already exists, skipping`);
+        await prisma.pet.update({
+          where: { id: existing.id },
+          data: { photos: pet.photos },
+        });
+        console.log(`  • ${pet.name} — updated photos`);
         continue;
       }
 
