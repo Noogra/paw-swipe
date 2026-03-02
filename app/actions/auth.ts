@@ -14,10 +14,11 @@ export async function login(
 ): Promise<AuthState> {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const remember = formData.get("remember") === "on";
 
   if (!email || !password) return { error: "Email and password are required." };
 
-  const supabase = await createClient();
+  const supabase = await createClient({ remember });
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,

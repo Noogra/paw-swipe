@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/ui/Navbar";
+import { BottomNav } from "@/components/ui/BottomNav";
 
 export default function AdopterLayout({
   children,
@@ -8,7 +9,9 @@ export default function AdopterLayout({
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
-      <main className="flex-1 flex flex-col">{children}</main>
+      {/* pb-16 reserves space above the fixed bottom nav on mobile */}
+      <main className="flex-1 flex flex-col pb-16 sm:pb-0">{children}</main>
+      <BottomNav />
     </div>
   );
 }

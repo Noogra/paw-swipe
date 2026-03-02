@@ -31,7 +31,7 @@ export async function Navbar() {
               Dashboard
             </Link>
           ) : (
-            <>
+            <div className="hidden sm:flex items-center gap-3">
               <Link
                 href="/feed"
                 className="text-sm font-medium text-gray-600 hover:text-amber-600 transition-colors"
@@ -44,7 +44,7 @@ export async function Navbar() {
               >
                 Liked ❤️
               </Link>
-            </>
+            </div>
           )
         ) : null}
 

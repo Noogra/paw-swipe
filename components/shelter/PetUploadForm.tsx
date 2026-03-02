@@ -113,7 +113,7 @@ export function PetUploadForm({ shelterCity }: Props) {
           </div>
 
           {/* Name + Type + Breed */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="space-y-2">
               <Label htmlFor="name">Name <span className="text-red-500">*</span></Label>
               <Input id="name" name="name" placeholder="Buddy" required />
@@ -137,7 +137,7 @@ export function PetUploadForm({ shelterCity }: Props) {
           </div>
 
           {/* Age + Size + Gender */}
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="space-y-2">
               <Label htmlFor="ageValue">Age <span className="text-red-500">*</span></Label>
               <Input
@@ -201,7 +201,7 @@ export function PetUploadForm({ shelterCity }: Props) {
 
           <Button
             type="submit"
-            className="w-full bg-amber-500 hover:bg-amber-600 text-white"
+            className="w-full"
             disabled={isPending}
           >
             {isPending ? "Adding pet…" : "Add Pet"}

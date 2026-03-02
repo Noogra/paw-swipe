@@ -56,6 +56,16 @@ export default function LoginPage() {
               autoComplete="current-password"
             />
           </div>
+
+          <label className="flex items-center gap-2.5 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              name="remember"
+              defaultChecked
+              className="w-4 h-4 rounded accent-amber-500 cursor-pointer"
+            />
+            <span className="text-sm text-gray-600">Remember me</span>
+          </label>
         </CardContent>
 
         <CardFooter className="flex flex-col gap-4">

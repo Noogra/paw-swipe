@@ -101,9 +101,9 @@ export function SwipeStack({ initialPets, filters }: Props) {
   const visiblePets = pets.slice(0, 3);
 
   return (
-    <div className="flex flex-col items-center gap-6 flex-1 w-full">
-      {/* Card stack */}
-      <div className="relative w-full max-w-sm h-[500px]">
+    <div className="flex flex-col items-center gap-4 sm:gap-6 flex-1 w-full min-h-0">
+      {/* Card stack — flex-1 fills available space, capped at 500px */}
+      <div className="relative w-full max-w-sm flex-1 min-h-0 max-h-[500px]">
         {[...visiblePets].reverse().map((pet, reversedIdx) => {
           const stackIndex = visiblePets.length - 1 - reversedIdx;
           const isTop = stackIndex === 0;
