@@ -11,6 +11,7 @@ export async function Navbar() {
 
   const role = user?.user_metadata?.role as "ADOPTER" | "SHELTER" | undefined;
   const isShelter = role === "SHELTER";
+  const initials = user?.email?.slice(0, 2).toUpperCase() ?? "";
 
   return (
     <header className="bg-white/90 backdrop-blur-md border-b px-4 py-3 flex items-center justify-between sticky top-0 z-50">
@@ -24,13 +25,17 @@ export async function Navbar() {
       <nav className="flex items-center gap-3">
         {user ? (
           isShelter ? (
-            <Link
-              href="/dashboard"
-              className="text-sm font-medium text-gray-600 hover:text-amber-600 transition-colors"
-            >
-              Dashboard
-            </Link>
+            /* Shelter nav — always visible */
+            <div className="flex items-center gap-3">
+              <Link
+                href="/dashboard"
+                className="text-sm font-medium text-gray-600 hover:text-amber-600 transition-colors"
+              >
+                Dashboard
+              </Link>
+            </div>
           ) : (
+            /* Adopter nav — hidden on mobile (lives in BottomNav) */
             <div className="hidden sm:flex items-center gap-3">
               <Link
                 href="/feed"
@@ -49,11 +54,21 @@ export async function Navbar() {
         ) : null}
 
         {user ? (
-          <form action={logout}>
-            <Button variant="outline" size="sm" type="submit">
-              Log out
-            </Button>
-          </form>
+          <div className="flex items-center gap-2">
+            {/* Avatar button — links to profile */}
+            <Link
+              href="/profile"
+              className="w-8 h-8 rounded-full bg-amber-100 hover:bg-amber-200 flex items-center justify-center text-xs font-bold text-amber-700 transition-colors select-none"
+              title="Profile"
+            >
+              {initials}
+            </Link>
+            <form action={logout}>
+              <Button variant="outline" size="sm" type="submit">
+                Log out
+              </Button>
+            </form>
+          </div>
         ) : (
           <div className="flex items-center gap-2">
             <Link
