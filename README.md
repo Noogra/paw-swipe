@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🐾 PawSwipe
+
+A Tinder-style pet adoption app — swipe through adoptable animals from shelters near you and find your perfect companion.
+
+Built with Next.js 16 App Router, Supabase auth, Prisma + PostgreSQL, and Framer Motion. Features a high-end UI with Glassmorphism, Bento Grid layouts, and Playfair Display serif typography.
+
+---
+
+## Features
+
+- **Swipe to discover** — drag cards left to pass, right to like, backed by spring physics
+- **Shelter profiles** — browse partner shelters and their available pets
+- **Liked pets** — saved matches with direct shelter contact details (phone, email, website)
+- **Filters** — narrow by pet type, size, gender, and city
+- **Dual roles** — separate flows for adopters and shelter managers
+- **Shelter dashboard** — upload and manage pet listings with Cloudinary image hosting
+- **Auth** — email/password sign-up and login via Supabase, with remember me
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router, RSC) |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| Animations | Framer Motion v12 |
+| Auth | Supabase Auth |
+| Database | PostgreSQL via Prisma ORM |
+| Image hosting | Cloudinary (next-cloudinary) |
+| Fonts | Geist Sans, Geist Mono, Playfair Display |
+
+## UI Design
+
+- **Glassmorphism** — frosted glass cards with `backdrop-filter` blur over amber gradient sections
+- **Liquid Glass** — amber-tinted glass surfaces on interactive elements
+- **Bento Grids** — asymmetric 12-column CSS Grid layouts on the landing page and secondary pages
+- **Typography** — oversized Playfair Display serif headings mixed with Geist Mono labels
+- **Micro-interactions** — scroll-triggered reveals, stagger animations, page transitions, hover effects
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+
+- PostgreSQL database
+- Supabase project
+- Cloudinary account
+
+### Environment Variables
+
+Create a `.env` file:
+
+```env
+DATABASE_URL=
+DIRECT_URL=
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Install & Run
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Push schema and seed the database
+npx prisma db push
+npx prisma db seed
 
-## Learn More
+# Start dev server
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open [http://localhost:3000](http://localhost:3000).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+├── (adopter)/        # Swipe feed, liked pets
+├── (auth)/           # Login, register
+├── (shelter)/        # Shelter dashboard
+├── shelters/[id]/    # Public shelter profiles
+├── profile/          # User profile
+└── api/pets/         # Infinite scroll API route
 
-## Deploy on Vercel
+components/
+├── landing/          # Hero and features sections
+├── swipe/            # SwipeCard, ActionButtons, FilterPanel
+├── shelters/         # ShelterCard, ShelterPetCard
+├── pets/             # LikedPetCard
+└── ui/               # Navbar, BottomNav, AnimatedSection, PageTransition
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
