@@ -81,7 +81,7 @@ export const SwipeCard = forwardRef<SwipeCardHandle, Props>(
 
     return (
       <motion.div
-        className="absolute inset-0 rounded-2xl overflow-hidden shadow-xl select-none"
+        className="absolute inset-0 rounded-3xl overflow-hidden select-none"
         style={{
           x: isTop ? x : 0,
           rotate: isTop ? rotate : 0,
@@ -89,6 +89,7 @@ export const SwipeCard = forwardRef<SwipeCardHandle, Props>(
           y: -yOffset,
           zIndex: 10 - stackIndex,
           cursor: isTop ? "grab" : "default",
+          boxShadow: "0 24px 60px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.1)",
         }}
         whileTap={isTop ? { cursor: "grabbing" } : undefined}
         drag={isTop ? "x" : false}
@@ -107,7 +108,8 @@ export const SwipeCard = forwardRef<SwipeCardHandle, Props>(
             draggable={false}
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center text-8xl">
+          <div className="absolute inset-0 flex items-center justify-center text-8xl"
+            style={{ background: "var(--grad-hero)" }}>
             🐾
           </div>
         )}
@@ -116,44 +118,69 @@ export const SwipeCard = forwardRef<SwipeCardHandle, Props>(
         {isTop && (
           <>
             <motion.div
-              className="absolute top-10 left-5 bg-green-500 text-white font-black text-xl px-4 py-1.5 rounded-xl border-[3px] border-green-600 -rotate-12"
-              style={{ opacity: likeOpacity }}
+              className="absolute top-10 left-5 font-black text-lg px-4 py-1.5 rounded-full -rotate-12 border-2"
+              style={{
+                opacity: likeOpacity,
+                background: "rgba(217, 119, 6, 0.18)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                borderColor: "rgba(217, 119, 6, 0.7)",
+                color: "#92400e",
+              }}
             >
               LIKE ❤️
             </motion.div>
             <motion.div
-              className="absolute top-10 right-5 bg-red-500 text-white font-black text-xl px-4 py-1.5 rounded-xl border-[3px] border-red-600 rotate-12"
-              style={{ opacity: nopeOpacity }}
+              className="absolute top-10 right-5 font-black text-lg px-4 py-1.5 rounded-full rotate-12 border-2"
+              style={{
+                opacity: nopeOpacity,
+                background: "rgba(239, 68, 68, 0.18)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                borderColor: "rgba(239, 68, 68, 0.7)",
+                color: "#991b1b",
+              }}
             >
               NOPE ✕
             </motion.div>
           </>
         )}
 
-        {/* Bottom gradient + info */}
-        <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black/80 via-black/50 to-transparent pointer-events-none" />
+        {/* Soft gradient fade */}
+        <div className="absolute inset-x-0 bottom-0 h-52 pointer-events-none"
+          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.4) 50%, transparent 100%)" }}
+        />
 
-        <div className="absolute inset-x-0 bottom-0 p-5 text-white pointer-events-none">
+        {/* Glass info panel */}
+        <div
+          className="absolute inset-x-3 bottom-3 p-4 rounded-2xl pointer-events-none"
+          style={{
+            background: "rgba(255,255,255,0.14)",
+            backdropFilter: "blur(18px)",
+            WebkitBackdropFilter: "blur(18px)",
+            border: "1px solid rgba(255,255,255,0.25)",
+          }}
+        >
           <div className="flex items-baseline gap-2 flex-wrap">
-            <h2 className="text-2xl font-bold leading-tight">{pet.name}</h2>
-            <span className="text-base font-medium opacity-90">
+            <h2 className="text-2xl font-bold text-white leading-tight">{pet.name}</h2>
+            <span className="font-mono text-sm text-white/80">
               {formatAge(pet.ageMonths)}
             </span>
-            <span className="text-sm opacity-75 capitalize">
+            <span className="text-sm text-white/65 capitalize">
               · {pet.gender.toLowerCase()}
             </span>
           </div>
 
           {pet.breed && (
-            <p className="text-sm opacity-80 mt-0.5">{pet.breed}</p>
+            <p className="text-sm text-white/75 mt-0.5">{pet.breed}</p>
           )}
 
-          <p className="text-sm opacity-70 mt-1.5">
+          <p className="text-sm text-white/65 mt-1.5">
             📍 {pet.city} · 🏠 {pet.shelter.name}
           </p>
 
           {pet.description && (
-            <p className="text-xs opacity-65 mt-2 line-clamp-2 leading-relaxed">
+            <p className="text-xs text-white/55 mt-2 line-clamp-2 leading-relaxed">
               {pet.description}
             </p>
           )}

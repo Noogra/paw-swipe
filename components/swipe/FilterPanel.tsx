@@ -29,6 +29,14 @@ const GENDERS = [
   { value: "FEMALE", label: "Female" },
 ];
 
+const selectStyle = {
+  background: "rgba(255, 237, 213, 0.45)",
+  backdropFilter: "blur(12px)",
+  WebkitBackdropFilter: "blur(12px)",
+  border: "1px solid rgba(217, 119, 6, 0.2)",
+  boxShadow: "0 2px 8px rgba(217,119,6,0.06)",
+} as React.CSSProperties;
+
 export function FilterPanel({ activeFilters }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -47,13 +55,14 @@ export function FilterPanel({ activeFilters }: Props) {
     activeFilters.type || activeFilters.size || activeFilters.gender || activeFilters.city;
 
   return (
-    <div className="w-full max-w-sm">
+    <div className="w-full max-w-lg">
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
         {/* Type */}
         <select
           value={activeFilters.type ?? ""}
           onChange={(e) => update("type", e.target.value)}
-          className="shrink-0 text-sm bg-white border rounded-full px-3 py-1.5 outline-none focus:ring-2 focus:ring-amber-300 cursor-pointer"
+          className="shrink-0 text-sm rounded-full px-3 py-1.5 outline-none focus:ring-2 focus:ring-amber-300 cursor-pointer font-medium text-amber-800"
+          style={selectStyle}
         >
           {PET_TYPES.map((o) => (
             <option key={o.value} value={o.value}>
@@ -66,7 +75,8 @@ export function FilterPanel({ activeFilters }: Props) {
         <select
           value={activeFilters.size ?? ""}
           onChange={(e) => update("size", e.target.value)}
-          className="shrink-0 text-sm bg-white border rounded-full px-3 py-1.5 outline-none focus:ring-2 focus:ring-amber-300 cursor-pointer"
+          className="shrink-0 text-sm rounded-full px-3 py-1.5 outline-none focus:ring-2 focus:ring-amber-300 cursor-pointer font-medium text-amber-800"
+          style={selectStyle}
         >
           {SIZES.map((o) => (
             <option key={o.value} value={o.value}>
@@ -79,7 +89,8 @@ export function FilterPanel({ activeFilters }: Props) {
         <select
           value={activeFilters.gender ?? ""}
           onChange={(e) => update("gender", e.target.value)}
-          className="shrink-0 text-sm bg-white border rounded-full px-3 py-1.5 outline-none focus:ring-2 focus:ring-amber-300 cursor-pointer"
+          className="shrink-0 text-sm rounded-full px-3 py-1.5 outline-none focus:ring-2 focus:ring-amber-300 cursor-pointer font-medium text-amber-800"
+          style={selectStyle}
         >
           {GENDERS.map((o) => (
             <option key={o.value} value={o.value}>
@@ -98,16 +109,17 @@ export function FilterPanel({ activeFilters }: Props) {
             if (e.key === "Enter")
               update("city", (e.target as HTMLInputElement).value);
           }}
-          className="shrink-0 w-24 text-sm bg-white border rounded-full px-3 py-1.5 outline-none focus:ring-2 focus:ring-amber-300"
+          className="shrink-0 w-28 text-sm rounded-full px-3 py-1.5 outline-none focus:ring-2 focus:ring-amber-300 font-medium text-amber-800 placeholder:text-amber-600/50"
+          style={selectStyle}
         />
 
         {/* Reset */}
         {hasActiveFilters && (
           <button
             onClick={() => router.push("/feed")}
-            className="shrink-0 text-sm text-amber-600 font-medium hover:underline px-2 py-1.5"
+            className="shrink-0 text-sm text-amber-600 font-semibold hover:text-amber-700 px-2 py-1.5 transition-colors"
           >
-            Reset
+            Reset ×
           </button>
         )}
       </div>

@@ -71,7 +71,7 @@ export default async function FeedPage({ searchParams }: PageProps) {
   return (
     <div className="flex flex-col items-center px-4 py-2 sm:py-4 gap-3 sm:gap-4 flex-1 min-h-0">
       {/* FilterPanel uses useSearchParams — must be in Suspense */}
-      <Suspense fallback={<div className="h-10 w-full" />}>
+      <Suspense fallback={<div className="h-10 w-full max-w-lg" />}>
         <FilterPanel activeFilters={filters} />
       </Suspense>
 

@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { removeSwipe } from "@/app/actions/swipes";
 
 type LikedPet = {
@@ -34,15 +35,17 @@ function formatAge(months: number): string {
 
 export function LikedPetCard({ petId, pet }: LikedPet) {
   const [isPending, startTransition] = useTransition();
-
   const photo = pet.photos[0] ?? null;
 
   return (
-    <div
-      className={`bg-white rounded-2xl border overflow-hidden shadow-sm transition-opacity ${isPending ? "opacity-40 pointer-events-none" : ""}`}
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: isPending ? 0.4 : 1 }}
+      whileHover={{ y: -2, transition: { duration: 0.2 } }}
+      className={`glass rounded-3xl overflow-hidden transition-shadow hover:shadow-lg ${isPending ? "pointer-events-none" : ""}`}
     >
       {/* Photo */}
-      <div className="relative h-48 bg-gray-100">
+      <div className="relative h-48 bg-amber-50 overflow-hidden">
         {photo ? (
           <Image
             src={photo}
@@ -52,7 +55,7 @@ export function LikedPetCard({ petId, pet }: LikedPet) {
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         ) : (
-          <div className="flex items-center justify-center h-full text-5xl text-gray-200">
+          <div className="flex items-center justify-center h-full text-5xl text-amber-200">
             🐾
           </div>
         )}
@@ -62,8 +65,8 @@ export function LikedPetCard({ petId, pet }: LikedPet) {
         {/* Pet info */}
         <div>
           <div className="flex items-baseline gap-2">
-            <h3 className="font-bold text-gray-900 text-lg">{pet.name}</h3>
-            <span className="text-sm text-gray-500">{formatAge(pet.ageMonths)}</span>
+            <h3 className="font-serif font-bold text-gray-900 text-lg">{pet.name}</h3>
+            <span className="font-mono text-xs text-gray-500">{formatAge(pet.ageMonths)}</span>
           </div>
           <p className="text-sm text-gray-500 mt-0.5">
             {pet.type.charAt(0) + pet.type.slice(1).toLowerCase()}
@@ -80,8 +83,8 @@ export function LikedPetCard({ petId, pet }: LikedPet) {
           </p>
         )}
 
-        {/* Shelter contact */}
-        <div className="bg-amber-50 rounded-xl p-3 space-y-1.5">
+        {/* Shelter contact — liquid glass */}
+        <div className="liquid-glass rounded-2xl p-3 space-y-1.5">
           <p className="text-xs font-semibold text-amber-800">
             🏠 {pet.shelter.name}
           </p>
@@ -115,9 +118,9 @@ export function LikedPetCard({ petId, pet }: LikedPet) {
           onClick={() => startTransition(() => removeSwipe(petId))}
           className="w-full text-xs text-gray-400 hover:text-red-500 transition-colors py-1"
         >
-          Remove from liked
+          Remove from liked ×
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }

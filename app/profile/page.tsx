@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { Navbar } from "@/components/ui/Navbar";
 import { BottomNav } from "@/components/ui/BottomNav";
+import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -16,7 +17,6 @@ export default async function ProfilePage() {
   const role = (user.user_metadata?.role as "ADOPTER" | "SHELTER") ?? "ADOPTER";
   const isAdopter = role === "ADOPTER";
 
-  // Fetch DB user for member-since date
   const dbUser = await prisma.user.findUnique({
     where: { id: user.id },
     select: { createdAt: true },
@@ -28,7 +28,6 @@ export default async function ProfilePage() {
       )
     : null;
 
-  // Adopter: liked count
   let likedCount = 0;
   if (isAdopter) {
     likedCount = await prisma.swipe.count({
@@ -36,7 +35,11 @@ export default async function ProfilePage() {
     });
   }
 
-  // Shelter: shelter details
+  let totalSwipes = 0;
+  if (isAdopter) {
+    totalSwipes = await prisma.swipe.count({ where: { userId: user.id } });
+  }
+
   const shelter = !isAdopter
     ? await prisma.shelter.findUnique({ where: { userId: user.id } })
     : null;
@@ -45,83 +48,108 @@ export default async function ProfilePage() {
   const initials = email.slice(0, 2).toUpperCase();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ background: "var(--bg-warm)" }}>
       <Navbar />
 
       <main
-        className={`max-w-xl mx-auto px-4 py-8 space-y-4 ${
-          isAdopter ? "pb-24 sm:pb-10" : "pb-10"
+        className={`max-w-2xl mx-auto px-4 py-8 ${
+          isAdopter ? "pb-28 sm:pb-10" : "pb-10"
         }`}
       >
-        {/* Identity card */}
-        <div className="bg-white rounded-2xl border shadow-sm p-6 flex items-center gap-5">
-          <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center text-2xl font-bold text-amber-700 flex-shrink-0 select-none">
-            {initials}
-          </div>
-          <div className="min-w-0">
-            <p className="font-semibold text-gray-900 truncate">{email}</p>
-            <div className="flex flex-wrap items-center gap-2 mt-1.5">
-              <span className="text-xs font-medium bg-amber-100 text-amber-700 px-2.5 py-0.5 rounded-full">
-                {isAdopter ? "🐾 Adopter" : "🏠 Shelter"}
-              </span>
-              {memberSince && (
-                <span className="text-xs text-gray-400">Since {memberSince}</span>
-              )}
-            </div>
-          </div>
-        </div>
+        <AnimatedSection className="mb-6">
+          <p className="font-mono text-xs tracking-widest text-amber-600 uppercase mb-1">
+            // Your profile
+          </p>
+          <h1 className="font-serif text-3xl font-bold text-gray-900">Account</h1>
+        </AnimatedSection>
 
-        {/* Adopter stats */}
-        {isAdopter && (
-          <div className="bg-white rounded-2xl border shadow-sm p-5">
-            <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
-              Activity
-            </h2>
-            <div className="flex items-center gap-4">
-              <div className="w-11 h-11 rounded-xl bg-red-50 flex items-center justify-center text-xl flex-shrink-0">
-                ❤️
+        <StaggerContainer className="grid grid-cols-12 gap-4">
+          {/* Identity card — spans 12 cols */}
+          <StaggerItem className="col-span-12">
+            <div className="glass rounded-3xl p-6 flex items-center gap-5">
+              {/* Avatar with amber ring */}
+              <div className="relative flex-shrink-0">
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{ background: "linear-gradient(135deg, #d97706, #f59e0b)", padding: "2px", borderRadius: "9999px" }}
+                />
+                <div className="relative w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center text-2xl font-bold text-amber-700 select-none border-2 border-white">
+                  {initials}
+                </div>
               </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900 leading-none">
-                  {likedCount}
-                </p>
-                <p className="text-sm text-gray-500 mt-0.5">
-                  liked pet{likedCount !== 1 ? "s" : ""}
-                </p>
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-gray-900 truncate">{email}</p>
+                <div className="flex flex-wrap items-center gap-2 mt-2">
+                  <span
+                    className="text-xs font-medium px-3 py-1 rounded-full"
+                    style={{
+                      background: "rgba(217,119,6,0.12)",
+                      color: "#92400e",
+                      border: "1px solid rgba(217,119,6,0.2)",
+                    }}
+                  >
+                    {isAdopter ? "🐾 Adopter" : "🏠 Shelter"}
+                  </span>
+                  {memberSince && (
+                    <span className="font-mono text-xs text-gray-400">since {memberSince}</span>
+                  )}
+                </div>
               </div>
-              {likedCount > 0 && (
-                <Link
-                  href="/liked"
-                  className="ml-auto text-xs text-amber-600 font-medium hover:underline"
-                >
-                  View all →
-                </Link>
-              )}
             </div>
-          </div>
-        )}
+          </StaggerItem>
 
-        {/* Shelter info */}
-        {shelter && (
-          <div className="bg-white rounded-2xl border shadow-sm p-5">
-            <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
-              Shelter details
-            </h2>
-            <div className="space-y-3">
-              <InfoRow label="Name" value={shelter.name} />
-              <InfoRow label="City" value={shelter.city} />
-              <InfoRow label="Address" value={shelter.address} />
-              <InfoRow label="Phone" value={shelter.phone} />
-              <InfoRow label="Contact email" value={shelter.email} />
-              {shelter.website && (
-                <InfoRow label="Website" value={shelter.website} />
-              )}
-            </div>
-          </div>
-        )}
+          {/* Adopter stats — bento */}
+          {isAdopter && (
+            <>
+              <StaggerItem className="col-span-6">
+                <div className="liquid-glass rounded-3xl p-5 flex flex-col gap-1 h-full">
+                  <span className="font-mono text-xs text-amber-600/70 uppercase tracking-widest">Total swipes</span>
+                  <span className="font-serif text-4xl font-black text-gray-900 mt-1">{totalSwipes}</span>
+                  <span className="text-xs text-gray-500">pets reviewed</span>
+                </div>
+              </StaggerItem>
+
+              <StaggerItem className="col-span-6">
+                <div className="liquid-glass rounded-3xl p-5 flex flex-col gap-1 h-full">
+                  <span className="font-mono text-xs text-amber-600/70 uppercase tracking-widest">Liked</span>
+                  <span className="font-serif text-4xl font-black text-amber-700 mt-1">{likedCount}</span>
+                  <span className="text-xs text-gray-500">pets you love</span>
+                  {likedCount > 0 && (
+                    <Link
+                      href="/liked"
+                      className="text-xs text-amber-600 font-semibold hover:underline mt-auto pt-2"
+                    >
+                      View all →
+                    </Link>
+                  )}
+                </div>
+              </StaggerItem>
+            </>
+          )}
+
+          {/* Shelter info */}
+          {shelter && (
+            <StaggerItem className="col-span-12">
+              <div className="glass rounded-3xl p-6">
+                <p className="font-mono text-xs text-amber-600/70 uppercase tracking-widest mb-4">
+                  // Shelter details
+                </p>
+                <div className="space-y-3">
+                  <InfoRow label="Name" value={shelter.name} />
+                  <InfoRow label="City" value={shelter.city} />
+                  <InfoRow label="Address" value={shelter.address} />
+                  <InfoRow label="Phone" value={shelter.phone} />
+                  <InfoRow label="Contact email" value={shelter.email} />
+                  {shelter.website && (
+                    <InfoRow label="Website" value={shelter.website} />
+                  )}
+                </div>
+              </div>
+            </StaggerItem>
+          )}
+        </StaggerContainer>
       </main>
 
-      {/* Bottom nav for adopters on mobile */}
       {isAdopter && <BottomNav />}
     </div>
   );
@@ -130,7 +158,7 @@ export default async function ProfilePage() {
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start justify-between gap-4">
-      <span className="text-sm text-gray-400 flex-shrink-0 w-32">{label}</span>
+      <span className="font-mono text-xs text-gray-400 flex-shrink-0 w-32 uppercase tracking-wide">{label}</span>
       <span className="text-sm text-gray-800 text-right break-all">{value}</span>
     </div>
   );

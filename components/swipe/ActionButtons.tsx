@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 interface Props {
   onNope: () => void;
   onLike: () => void;
@@ -10,25 +12,45 @@ export function ActionButtons({ onNope, onLike, disabled }: Props) {
   return (
     <div className="flex items-center gap-10">
       <div className="flex flex-col items-center gap-1.5">
-        <button
+        <motion.button
           onClick={onNope}
           disabled={disabled}
-          className="w-16 h-16 rounded-full bg-white shadow-lg border-2 border-red-200 text-red-400 text-2xl flex items-center justify-center hover:bg-red-50 hover:border-red-400 hover:scale-110 active:scale-95 transition-all disabled:opacity-40"
+          whileHover={{ scale: 1.12 }}
+          whileTap={{ scale: 0.92 }}
+          className="w-16 h-16 rounded-full text-2xl flex items-center justify-center transition-opacity disabled:opacity-40"
+          style={{
+            background: "rgba(239, 68, 68, 0.1)",
+            backdropFilter: "blur(16px) saturate(1.8)",
+            WebkitBackdropFilter: "blur(16px) saturate(1.8)",
+            border: "1.5px solid rgba(239, 68, 68, 0.35)",
+            boxShadow: "0 4px 20px rgba(239,68,68,0.12)",
+            color: "#dc2626",
+          }}
           aria-label="Pass"
         >
           ✕
-        </button>
+        </motion.button>
         <span className="text-xs text-gray-400 font-medium">Pass</span>
       </div>
+
       <div className="flex flex-col items-center gap-1.5">
-        <button
+        <motion.button
           onClick={onLike}
           disabled={disabled}
-          className="w-16 h-16 rounded-full bg-white shadow-lg border-2 border-green-200 text-green-400 text-2xl flex items-center justify-center hover:bg-green-50 hover:border-green-400 hover:scale-110 active:scale-95 transition-all disabled:opacity-40"
+          whileHover={{ scale: 1.12 }}
+          whileTap={{ scale: 0.92 }}
+          className="w-16 h-16 rounded-full text-2xl flex items-center justify-center transition-opacity disabled:opacity-40"
+          style={{
+            background: "rgba(217, 119, 6, 0.1)",
+            backdropFilter: "blur(16px) saturate(1.8)",
+            WebkitBackdropFilter: "blur(16px) saturate(1.8)",
+            border: "1.5px solid rgba(217, 119, 6, 0.35)",
+            boxShadow: "0 4px 20px rgba(217,119,6,0.15)",
+          }}
           aria-label="Like"
         >
           ❤️
-        </button>
+        </motion.button>
         <span className="text-xs text-gray-400 font-medium">Like</span>
       </div>
     </div>

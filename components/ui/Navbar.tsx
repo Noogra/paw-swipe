@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { logout } from "@/app/actions/auth";
-import { Button } from "@/components/ui/button";
 
 export async function Navbar() {
   const supabase = await createClient();
@@ -14,10 +13,10 @@ export async function Navbar() {
   const initials = user?.email?.slice(0, 2).toUpperCase() ?? "";
 
   return (
-    <header className="bg-white/90 backdrop-blur-md border-b px-4 py-3 flex items-center justify-between sticky top-0 z-50">
+    <header className="glass sticky top-0 z-50 px-5 py-3.5 flex items-center justify-between">
       <Link
         href="/"
-        className="text-xl font-bold text-amber-600 hover:text-amber-700 transition-colors"
+        className="text-2xl font-bold font-serif text-amber-700 hover:text-amber-800 transition-colors amber-glow"
       >
         🐾 PawSwipe
       </Link>
@@ -25,27 +24,25 @@ export async function Navbar() {
       <nav className="flex items-center gap-3">
         {user ? (
           isShelter ? (
-            /* Shelter nav — always visible */
             <div className="flex items-center gap-3">
               <Link
                 href="/dashboard"
-                className="text-sm font-medium text-gray-600 hover:text-amber-600 transition-colors"
+                className="text-sm font-medium text-gray-600 hover:text-amber-600 transition-colors amber-glow"
               >
                 Dashboard
               </Link>
             </div>
           ) : (
-            /* Adopter nav — hidden on mobile (lives in BottomNav) */
             <div className="hidden sm:flex items-center gap-3">
               <Link
                 href="/feed"
-                className="text-sm font-medium text-gray-600 hover:text-amber-600 transition-colors"
+                className="text-sm font-medium text-gray-600 hover:text-amber-600 transition-colors amber-glow"
               >
                 Discover
               </Link>
               <Link
                 href="/liked"
-                className="text-sm font-medium text-gray-600 hover:text-amber-600 transition-colors"
+                className="text-sm font-medium text-gray-600 hover:text-amber-600 transition-colors amber-glow"
               >
                 Liked ❤️
               </Link>
@@ -55,18 +52,20 @@ export async function Navbar() {
 
         {user ? (
           <div className="flex items-center gap-2">
-            {/* Avatar button — links to profile */}
             <Link
               href="/profile"
-              className="w-8 h-8 rounded-full bg-amber-100 hover:bg-amber-200 flex items-center justify-center text-xs font-bold text-amber-700 transition-colors select-none"
+              className="w-9 h-9 rounded-full bg-amber-100 hover:bg-amber-200 flex items-center justify-center text-xs font-bold text-amber-700 transition-all hover:scale-105 select-none border border-amber-200/60"
               title="Profile"
             >
               {initials}
             </Link>
             <form action={logout}>
-              <Button variant="outline" size="sm" type="submit">
+              <button
+                type="submit"
+                className="liquid-glass rounded-full px-4 py-1.5 text-sm font-medium text-amber-700 hover:text-amber-800 transition-all hover:scale-105"
+              >
                 Log out
-              </Button>
+              </button>
             </form>
           </div>
         ) : (
@@ -77,8 +76,11 @@ export async function Navbar() {
             >
               Log in
             </Link>
-            <Link href="/register">
-              <Button size="sm">Sign up</Button>
+            <Link
+              href="/register"
+              className="liquid-glass rounded-full px-4 py-1.5 text-sm font-medium text-amber-700 hover:text-amber-800 transition-all hover:scale-105"
+            >
+              Sign up
             </Link>
           </div>
         )}
